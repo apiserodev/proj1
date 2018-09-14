@@ -1,0 +1,52 @@
+#%RAML 1.0
+version: v1
+baseUri: https://mocksvc.mulesoft.com/mocks/fd687f4c-4dbb-45cb-bd87-35e299b4dabf # 
+title: FlightsAPI
+description: A REST API to perrform operations relating to flights.
+types: 
+  flt: !include exchange_modules/68ef9520-24e9-4cf2-b2f5-620025690913/training-american-flight-data-type/1.0.1/AmericanFlightDataType.raml
+
+/flights:
+  description: FLights with ID
+  get:
+    queryParameters: 
+      source:
+        required: false
+        enum: 
+          - SFA
+          - LXA
+          - HYD
+          - IXC
+          - DEL
+      destination:
+        type: string
+        required: false
+    responses: 
+      200:
+        body:
+          application/json:
+            type: flt []
+            example:
+              !include exchange_modules/68ef9520-24e9-4cf2-b2f5-620025690913/training-american-flights-example/1.0.1/AmericanFlightsExample.raml
+  post:
+    body:
+      application/json:
+        type: flt
+        example: !include examples/FlightNoIdExample.raml
+    responses: 
+      200:
+        body: 
+          application/json:
+            example:
+              {
+                "message": "Flight added!{but not really}"
+              }
+  /{ID}:
+    get:
+      responses: 
+        200:
+          body:
+            application/json:
+              type: flt
+              example: !include examples/FlightNoIdExample.raml
+    delete:

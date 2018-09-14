@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/apikit" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:spring="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/apikit http://www.mulesoft.org/schema/mule/apikit/current/mule-apikit.xsd
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
+    <flow name="flightsapi-main">
+        <http:listener config-ref="flightsapi-httpListenerConfig" path="/api/*" doc:name="HTTP"/>
+        <apikit:router config-ref="flightsapi-config" doc:name="APIkit Router"/>
+        <exception-strategy ref="flightsapi-apiKitGlobalExceptionMapping" doc:name="Reference Exception Strategy"/>
+    </flow>
+    <flow name="flightsapi-console">
+        <http:listener config-ref="flightsapi-httpListenerConfig" path="/console/*" doc:name="HTTP"/>
+        <apikit:console config-ref="flightsapi-config" doc:name="APIkit Console"/>
+    </flow>
+    <flow name="delete:/flights/{ID}:flightsapi-config">
+        <flow-ref name="deleteFlight" doc:name="Flow Reference"/>
+
+    </flow>
+    <flow name="get:/flights:flightsapi-config">
+        <flow-ref name="getFlights" doc:name="Flow Reference"/>
+
+    </flow>
+    <flow name="get:/flights/{ID}:flightsapi-config">
+        <flow-ref name="getFlightById" doc:name="Flow Reference"/>
+
+    </flow>
+    <flow name="post:/flights:application/json:flightsapi-config">
+        <flow-ref name="addFlight" doc:name="Flow Reference"/>
+
+    </flow>
+</mule>
